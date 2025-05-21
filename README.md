@@ -26,9 +26,48 @@ To implement MESSAGE AUTHENTICATION CODE(MAC)
 
 ## Program:
 
-
+```C
+#include <stdio.h>
+#include <string.h>
+#define KEY "secretkey" // Shared secret key
+// Function to calculate a simple MAC using XOR
+unsigned int calculate_mac(const char *message, const char *key) {unsigned int mac = 0;
+int i;
+for (i = 0; i < strlen(message); i++) {
+mac ^= message[i];
+}
+for (i = 0; i < strlen(key); i++) {
+mac ^= key[i];
+}
+return mac;
+}
+int main() {
+char message[256];
+unsigned int mac_sent, mac_received;
+// Input message from user
+printf("Enter the message: ");
+fgets(message, sizeof(message), stdin);
+message[strcspn(message, "\n")] = '\0'; // Remove newline character
+// Sender generates MAC
+mac_sent = calculate_mac(message, KEY);
+printf("Generated MAC (sent): %u\n", mac_sent);
+// Simulate transmission of message and MAC (in real use, this would be sentto the receiver)
+// Receiver calculates MAC and verifies
+mac_received = calculate_mac(message, KEY);
+printf("Calculated MAC (received): %u\n", mac_received);
+// Check if the MACs match
+if (mac_sent == mac_received) {
+printf("Message is authentic.\n");
+} else {
+printf("Message integrity check failed.\n");
+}
+return 0;
+}
+```
 
 ## Output:
+![Screenshot 2025-05-21 085145](https://github.com/user-attachments/assets/06f2d4be-a059-448c-8206-59f0c5c57914)
+
 
 
 ## Result:
